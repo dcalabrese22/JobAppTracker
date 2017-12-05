@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_margin="25dp"
+    tools:context="dan.dcalabrese22.com.jobapptracker.NewJobAcitvity">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/add_new_job_text_size"
+        android:hint="@string/tv_company_name_hint"
+        android:layout_margin="@dimen/add_new_job_view_margin"
+        android:id="@+id/tv_company_name"/>
+    
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/add_new_job_text_size"
+        android:hint="@string/tv_date_applied_hint"
+        android:layout_margin="@dimen/add_new_job_view_margin"
+        android:layout_below="@id/tv_company_name"
+        android:id="@+id/tv_date_applied"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/add_new_job_text_size"
+        android:hint="@string/tv_job_description_hint"
+        android:layout_margin="@dimen/add_new_job_view_margin"
+        android:layout_below="@id/tv_date_applied"
+        android:id="@+id/tv_job_description"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:text="@string/btn_get_from_clipboard"
+        android:id="@+id/btn_get_link_from_clipboard"/>
+
+</RelativeLayout>

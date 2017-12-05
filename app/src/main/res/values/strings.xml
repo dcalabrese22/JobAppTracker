@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">JobAppTracker</string>
+
+    <string name="btn_new_job">Add new job</string>
+    <string name="btn_export_to_csv">Export jobs to csv</string>
+    <string name="tv_company_name_hint">Company name</string>
+    <string name="tv_date_applied_hint">Date applied</string>
+    <string name="tv_job_description_hint">Job description</string>
+    <string name="btn_today">Today</string>
+    <string name="btn_get_from_clipboard">Get link from clipboard</string>
+</resources>
