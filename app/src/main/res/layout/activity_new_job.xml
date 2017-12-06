@@ -7,33 +7,33 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:layout_margin="25dp"
-    tools:context="dan.dcalabrese22.com.jobapptracker.NewJobAcitvity">
+    tools:context="dan.dcalabrese22.com.jobapptracker.NewJobActivity">
 
-    <TextView
+    <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="@dimen/add_new_job_text_size"
         android:hint="@string/tv_company_name_hint"
         android:layout_margin="@dimen/add_new_job_view_margin"
-        android:id="@+id/tv_company_name"/>
+        android:id="@+id/et_company_name"/>
     
-    <TextView
+    <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="@dimen/add_new_job_text_size"
         android:hint="@string/tv_date_applied_hint"
         android:layout_margin="@dimen/add_new_job_view_margin"
-        android:layout_below="@id/tv_company_name"
-        android:id="@+id/tv_date_applied"/>
+        android:layout_below="@id/et_company_name"
+        android:id="@+id/et_date_applied"/>
 
-    <TextView
+    <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="@dimen/add_new_job_text_size"
         android:hint="@string/tv_job_description_hint"
         android:layout_margin="@dimen/add_new_job_view_margin"
-        android:layout_below="@id/tv_date_applied"
-        android:id="@+id/tv_job_description"/>
+        android:layout_below="@id/et_date_applied"
+        android:id="@+id/et_job_description"/>
 
     <Button
         android:layout_width="wrap_content"
@@ -41,5 +41,12 @@
         android:layout_alignParentBottom="true"
         android:text="@string/btn_get_from_clipboard"
         android:id="@+id/btn_get_link_from_clipboard"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_add_job"
+        android:layout_alignParentBottom="true"
+        android:layout_toEndOf="@id/btn_get_link_from_clipboard"/>
 
 </RelativeLayout>

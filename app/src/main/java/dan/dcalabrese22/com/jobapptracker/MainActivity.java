@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onClick(View view) {
-            Intent intent = new Intent(mContext, NewJobAcitvity.class);
+            Intent intent = new Intent(mContext, NewJobActivity.class);
             startActivity(intent);
         }
     }
