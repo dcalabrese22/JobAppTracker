@@ -5,6 +5,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -31,11 +32,12 @@ public class NewJobActivity extends AppCompatActivity {
         setContentView(R.layout.activity_new_job);
 
         mContext = this;
-        mCompanyName = findViewById(R.id.tv_company_name);
-        mDateApplied = findViewById(R.id.tv_date_applied);
+        mCompanyName = findViewById(R.id.et_company_name);
+        mDateApplied = findViewById(R.id.et_date_applied);
         mDateApplied.setText(getTodaysDate());
-        mJobDescription = findViewById(R.id.tv_job_description);
-
+        mJobDescription = findViewById(R.id.et_job_description);
+        mGetFromClipboardBtn = findViewById(R.id.btn_get_link_from_clipboard);
+        mAddJobBtn = findViewById(R.id.btn_add_new_job);
         mOperations = new DbOperations(this);
 
         mGetFromClipboardBtn.setOnClickListener(new GetFromClipboardButtonListener());
@@ -56,14 +58,15 @@ public class NewJobActivity extends AppCompatActivity {
     private class AddJobButtonListener implements View.OnClickListener {
         @Override
         public void onClick(View view) {
-            if (mCompanyName.getText().toString().equals("") || mDateApplied.getText().toString().equals("") ||
-                    mJobDescription.getText().toString().equals("")) {
+            if (!mCompanyName.getText().toString().equals("") && !mDateApplied.getText().toString().equals("") &&
+                    !mJobDescription.getText().toString().equals("")) {
                 Job job = new Job(mCompanyName.getText().toString(), mDateApplied.getText().toString(),
                         mJobDescription.getText().toString());
                 mOperations.insertJob(job);
                 mCompanyName.getText().clear();
                 mJobDescription.getText().clear();
                 mDateApplied.setText(getTodaysDate());
+                Log.d("add new job", "pressed");
             }
         }
     }

@@ -47,6 +47,7 @@
         android:layout_height="wrap_content"
         android:text="@string/btn_add_job"
         android:layout_alignParentBottom="true"
-        android:layout_toEndOf="@id/btn_get_link_from_clipboard"/>
+        android:layout_toEndOf="@id/btn_get_link_from_clipboard"
+        android:id="@+id/btn_add_new_job"/>
 
 </RelativeLayout>
