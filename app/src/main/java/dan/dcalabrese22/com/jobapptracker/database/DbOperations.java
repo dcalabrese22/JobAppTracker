@@ -32,6 +32,20 @@ public class DbOperations {
         mDatabase.insert(DbContract.JobEntry.JOB_TABLE, null, contentValues);
     }
 
+    public Job getSingleJob(int jobId) {
+        String selection = DbContract.JobEntry._ID + "=?";
+        String[] selectionArgs = {String.valueOf(jobId)};
+        Cursor cursor = mDatabase.query(DbContract.JobEntry.JOB_TABLE, null, selection,
+                selectionArgs, null, null, null, null);
+        cursor.moveToNext();
+        String companyName = cursor.getString(cursor.getColumnIndex(DbContract.JobEntry.JOB_COLUMN_COMPANY));
+        String dateApplied = cursor.getString(cursor.getColumnIndex(DbContract.JobEntry.JOB_COLUMN_DATE_APPLIED));
+        String jobDesc = cursor.getString(cursor.getColumnIndex(DbContract.JobEntry.JOB_COLUMN_DESCRIPTION));
+        cursor.close();
+        return new Job(jobId, companyName, dateApplied, jobDesc);
+
+    }
+
     public List<Job> getAllJobs() {
         List<Job> jobs = new ArrayList<>();
         Cursor cursor = mDatabase.query(DbContract.JobEntry.JOB_TABLE, null, null,
@@ -41,7 +55,8 @@ public class DbOperations {
             String companyName = cursor.getString(cursor.getColumnIndex(DbContract.JobEntry.JOB_COLUMN_COMPANY));
             String dateApplied = cursor.getString(cursor.getColumnIndex(DbContract.JobEntry.JOB_COLUMN_DATE_APPLIED));
             String jobDesc = cursor.getString(cursor.getColumnIndex(DbContract.JobEntry.JOB_COLUMN_DESCRIPTION));
-            Job job = new Job(companyName, dateApplied, jobDesc);
+            int jobId = cursor.getInt(cursor.getColumnIndex(DbContract.JobEntry._ID));
+            Job job = new Job(jobId, companyName, dateApplied, jobDesc);
             jobs.add(job);
         }
         cursor.close();

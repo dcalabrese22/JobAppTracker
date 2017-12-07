@@ -10,4 +10,5 @@
     <string name="btn_get_from_clipboard">Get link from clipboard</string>
     <string name="btn_add_job">Add job</string>
     <string name="tv_applied">Applied:</string>
+    <string name="btn_add_interaction">Add Interaction</string>
 </resources>

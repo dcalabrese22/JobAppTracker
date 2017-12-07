@@ -20,6 +20,9 @@ public class MainActivity extends AppCompatActivity implements JobClickHandler{
     private JobListAdapter mAdapter;
 
     public static final String JOB_ID_EXTRA = "job_id_extra";
+    public static final String JOB_COMPANY_NAME_EXTRA = "company_name_extra";
+    public static final String JOB_DATE_APPLIED_EXTRA = "date_applied_extra";
+    public static final String JOB_DESCRIPTION_EXTRA = "description_extra";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +49,13 @@ public class MainActivity extends AppCompatActivity implements JobClickHandler{
     @Override
     public void onJobClick(Job job) {
         Intent intent = new Intent(mContext, JobDetailActivity.class);
-
+        Bundle bundle = new Bundle();
+        bundle.putInt(JOB_ID_EXTRA, job.getJobId());
+        bundle.putString(JOB_COMPANY_NAME_EXTRA, job.getCompanyName());
+        bundle.putString(JOB_DATE_APPLIED_EXTRA, job.getDateApplied());
+        bundle.putString(JOB_DESCRIPTION_EXTRA, job.getJobDescription());
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 
     private class NewJobBtnClickListener implements View.OnClickListener {
