@@ -18,7 +18,11 @@
             </intent-filter>
         </activity>
         <activity android:name=".NewJobActivity" />
-        <activity android:name=".JobDetailActivity"></activity>
+        <activity
+            android:name=".JobDetailActivity"
+            android:windowSoftInputMode="adjustPan|stateHidden">
+
+        </activity>
     </application>
 
 </manifest>

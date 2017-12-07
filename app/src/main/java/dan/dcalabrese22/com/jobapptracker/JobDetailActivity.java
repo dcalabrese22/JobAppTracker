@@ -2,7 +2,9 @@ package dan.dcalabrese22.com.jobapptracker;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -21,6 +23,7 @@ public class JobDetailActivity extends AppCompatActivity {
     private EditText mNewInteraction;
     private Button mAddInteraction;
     private RecyclerView mRecyclerView;
+    private InteractionsListAdapter mAdapter;
     private int mJobId;
     private DbOperations mOperator;
 
@@ -45,8 +48,16 @@ public class JobDetailActivity extends AppCompatActivity {
 
         mOperator = new DbOperations(this);
 
-
+        mAdapter = new InteractionsListAdapter();
         List<Interaction> interactionList = mOperator.getAllInteractionsForJob(mJobId);
+        Log.d("interactions", interactionList.toString());
+        mAdapter.setInteractionData(interactionList);
+        Log.d("mAdapter", mAdapter.getInteractionsList().toString());
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        layoutManager.setReverseLayout(true);
+        mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.setLayoutManager(layoutManager);
 
 
     }
@@ -57,6 +68,9 @@ public class JobDetailActivity extends AppCompatActivity {
             if (!mNewInteraction.getText().toString().equals("")) {
                 Interaction interaction = new Interaction(mNewInteraction.getText().toString());
                 mOperator.insertInteraction(interaction, mJobId);
+                mAdapter.clearInteractions();
+                mAdapter.setInteractionData(mOperator.getAllInteractionsForJob(mJobId));
+                mNewInteraction.getText().clear();
             }
         }
     }

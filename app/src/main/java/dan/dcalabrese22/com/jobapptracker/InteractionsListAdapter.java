@@ -1,8 +1,11 @@
 package dan.dcalabrese22.com.jobapptracker;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import java.util.List;
 
@@ -24,14 +27,27 @@ public class InteractionsListAdapter extends RecyclerView.Adapter<InteractionsLi
         notifyDataSetChanged();
     }
 
+    public void clearInteractions() {
+        mInteractionsList.clear();
+    }
+
+    public List<Interaction> getInteractionsList(){
+        return mInteractionsList;
+    }
+
     @Override
     public InteractionsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return null;
+        Context context = parent.getContext();
+        LayoutInflater inflater = LayoutInflater.from(context);
+        View view = inflater.inflate(R.layout.interaction, parent, false);
+        return new InteractionsViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(InteractionsViewHolder holder, int position) {
-
+        TextView note = holder.mNote;
+        Interaction interaction = mInteractionsList.get(position);
+        note.setText(interaction.getNote());
     }
 
     @Override
@@ -43,8 +59,12 @@ public class InteractionsListAdapter extends RecyclerView.Adapter<InteractionsLi
     }
 
     public class InteractionsViewHolder extends RecyclerView.ViewHolder {
+
+        private TextView mNote;
+
         public InteractionsViewHolder(View view) {
             super(view);
+            mNote = view.findViewById(R.id.tv_interaction_note);
         }
     }
 }
