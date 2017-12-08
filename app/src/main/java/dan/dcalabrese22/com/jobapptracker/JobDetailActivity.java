@@ -24,7 +24,7 @@ public class JobDetailActivity extends AppCompatActivity {
     private Button mAddInteraction;
     private RecyclerView mRecyclerView;
     private InteractionsListAdapter mAdapter;
-    private int mJobId;
+    private long mJobId;
     private DbOperations mOperator;
 
     @Override
@@ -44,7 +44,7 @@ public class JobDetailActivity extends AppCompatActivity {
         mCompanyName.setText(extras.getString(MainActivity.JOB_COMPANY_NAME_EXTRA));
         mDateApplied.setText(extras.getString(MainActivity.JOB_DATE_APPLIED_EXTRA));
         mJobDescription.setText(extras.getString(MainActivity.JOB_DESCRIPTION_EXTRA));
-        mJobId = extras.getInt(MainActivity.JOB_ID_EXTRA);
+        mJobId = extras.getLong(MainActivity.JOB_ID_EXTRA);
 
         mOperator = new DbOperations(this);
 

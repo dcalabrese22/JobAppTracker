@@ -6,14 +6,14 @@ package dan.dcalabrese22.com.jobapptracker.objects;
 
 public class Job {
 
-    private int jobId;
+    private long jobId;
     private String companyName;
     private String dateApplied;
     private String jobDescription;
 
     public Job() {}
 
-    public Job(int jobId, String companyName, String dateApplied, String jobDescription) {
+    public Job(long jobId, String companyName, String dateApplied, String jobDescription) {
         this.jobId = jobId;
         this.companyName = companyName;
         this.dateApplied = dateApplied;
@@ -26,11 +26,11 @@ public class Job {
         this.jobDescription = jobDescription;
     }
 
-    public int getJobId() {
+    public long getJobId() {
         return jobId;
     }
 
-    public void setJobId(int jobId) {
+    public void setJobId(long jobId) {
         this.jobId = jobId;
     }
 

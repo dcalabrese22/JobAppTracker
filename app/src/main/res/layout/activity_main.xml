@@ -5,27 +5,29 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="20dp"
     tools:context="dan.dcalabrese22.com.jobapptracker.MainActivity">
 
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_marginBottom="60dp"
+        android:layout_height="match_parent"
+        android:layout_margin="20dp"
         android:id="@+id/rv_jobs_list"/>
 
-    <Button
-        android:layout_width="match_parent"
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/btn_new_job"
-        android:layout_below="@+id/rv_jobs_list"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:src="@drawable/ic_add_white_24px"
         android:id="@+id/btn_new_job"/>
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/btn_export_to_csv"
-        android:layout_below="@+id/btn_new_job"
-        android:id="@+id/btn_export"/>
+    <!--<Button-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="@string/btn_export_to_csv"-->
+        <!--android:layout_below="@+id/btn_new_job"-->
+        <!--android:id="@+id/btn_export"/>-->
 
 </RelativeLayout>

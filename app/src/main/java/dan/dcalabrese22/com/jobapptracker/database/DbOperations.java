@@ -24,12 +24,12 @@ public class DbOperations {
         mDatabase = application.getConnection();
     }
 
-    public void insertJob(Job job) {
+    public long insertJob(Job job) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(DbContract.JobEntry.JOB_COLUMN_COMPANY, job.getCompanyName());
         contentValues.put(DbContract.JobEntry.JOB_COLUMN_DATE_APPLIED, job.getDateApplied());
         contentValues.put(DbContract.JobEntry.JOB_COLUMN_DESCRIPTION, job.getJobDescription());
-        mDatabase.insert(DbContract.JobEntry.JOB_TABLE, null, contentValues);
+        return mDatabase.insert(DbContract.JobEntry.JOB_TABLE, null, contentValues);
     }
 
     public Job getSingleJob(int jobId) {
@@ -55,7 +55,7 @@ public class DbOperations {
             String companyName = cursor.getString(cursor.getColumnIndex(DbContract.JobEntry.JOB_COLUMN_COMPANY));
             String dateApplied = cursor.getString(cursor.getColumnIndex(DbContract.JobEntry.JOB_COLUMN_DATE_APPLIED));
             String jobDesc = cursor.getString(cursor.getColumnIndex(DbContract.JobEntry.JOB_COLUMN_DESCRIPTION));
-            int jobId = cursor.getInt(cursor.getColumnIndex(DbContract.JobEntry._ID));
+            long jobId = cursor.getInt(cursor.getColumnIndex(DbContract.JobEntry._ID));
             Job job = new Job(jobId, companyName, dateApplied, jobDesc);
             jobs.add(job);
         }
@@ -63,14 +63,14 @@ public class DbOperations {
         return jobs;
     }
 
-    public void insertInteraction(Interaction interaction, int jobId) {
+    public void insertInteraction(Interaction interaction, long jobId) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(DbContract.InteractionEntry.INTERACTION_COLUMN_NOTE, interaction.getNote());
         contentValues.put(DbContract.InteractionEntry.INTERACTION_COLUMN_FOREIGN_KEY, jobId);
         mDatabase.insert(DbContract.InteractionEntry.INTERACTION_TABLE, null, contentValues);
     }
 
-    public List<Interaction> getAllInteractionsForJob(int jobId) {
+    public List<Interaction> getAllInteractionsForJob(long jobId) {
         List<Interaction> interactions = new ArrayList<>();
         String selection = DbContract.InteractionEntry.INTERACTION_COLUMN_FOREIGN_KEY + "=?";
         String selectionArgs[] = {String.valueOf(jobId)};
@@ -85,6 +85,14 @@ public class DbOperations {
         }
         cursor.close();
         return interactions;
+    }
+
+    public void deleteJob(long jobId) {
+        String whereJob = "_ID=?";
+        String[] args = {String.valueOf(jobId)};
+        mDatabase.delete(DbContract.JobEntry.JOB_TABLE, whereJob, args);
+        String whereInteraction = DbContract.InteractionEntry.INTERACTION_COLUMN_FOREIGN_KEY + "=?";
+        mDatabase.delete(DbContract.InteractionEntry.INTERACTION_TABLE, whereInteraction, args);
     }
 
 }

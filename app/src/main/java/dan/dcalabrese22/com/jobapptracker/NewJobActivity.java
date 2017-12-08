@@ -62,7 +62,8 @@ public class NewJobActivity extends AppCompatActivity {
                     !mJobDescription.getText().toString().equals("")) {
                 Job job = new Job(mCompanyName.getText().toString(), mDateApplied.getText().toString(),
                         mJobDescription.getText().toString());
-                mOperations.insertJob(job);
+                long id = mOperations.insertJob(job);
+                job.setJobId(id);
                 mCompanyName.getText().clear();
                 mJobDescription.getText().clear();
                 mDateApplied.setText(getTodaysDate());

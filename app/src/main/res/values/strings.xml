@@ -11,4 +11,8 @@
     <string name="btn_add_job">Add job</string>
     <string name="tv_applied">Applied:</string>
     <string name="btn_add_interaction">Add Interaction</string>
+    <string name="write_to_drive">Write to Google Drive</string>
+    <string name="request_to_delete">Are you sure you want to delete?</string>
+    <string name="delete_alert_button">Delete</string>
+    <string name="cancel_alert_button">Cancel</string>
 </resources>
