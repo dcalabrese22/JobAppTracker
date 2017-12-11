@@ -19,7 +19,12 @@ import dan.dcalabrese22.com.jobapptracker.objects.Interaction;
 public class InteractionsListAdapter extends RecyclerView.Adapter<InteractionsListAdapter.InteractionsViewHolder> {
 
     private List<Interaction> mInteractionsList;
+    private Context mContext;
     private DbOperations mOperator;
+
+    public InteractionsListAdapter(Context context) {
+        mContext = context;
+    }
 
 
     public void setInteractionData(List<Interaction> interactionList) {
@@ -47,7 +52,8 @@ public class InteractionsListAdapter extends RecyclerView.Adapter<InteractionsLi
     public void onBindViewHolder(InteractionsViewHolder holder, int position) {
         TextView note = holder.mNote;
         Interaction interaction = mInteractionsList.get(position);
-        note.setText(interaction.getNote());
+        String text = mContext.getResources().getString(R.string.bullet, interaction.getNote());
+        note.setText(text);
     }
 
     @Override

@@ -55,7 +55,7 @@ public class JobListAdapter extends RecyclerView.Adapter<JobListAdapter.JobViewH
         Job job = mJobs.get(position);
         company.setText(job.getCompanyName());
         date.setText(job.getDateApplied());
-        description.setText(job.getJobDescription());
+        description.setText(mContext.getResources().getString(R.string.tv_job_description_holder));
     }
 
     @Override
@@ -70,6 +70,7 @@ public class JobListAdapter extends RecyclerView.Adapter<JobListAdapter.JobViewH
 
         private TextView mCompanyName;
         private TextView mDateApplied;
+        private TextView mAppliedText;
         private TextView mJobDescription;
 
         public JobViewHolder(View view) {
@@ -77,11 +78,37 @@ public class JobListAdapter extends RecyclerView.Adapter<JobListAdapter.JobViewH
             mCompanyName = view.findViewById(R.id.tv_company_name);
             mDateApplied = view.findViewById(R.id.tv_date);
             mJobDescription = view.findViewById(R.id.tv_job_description);
-            view.setOnClickListener(new View.OnClickListener() {
+            mAppliedText = view.findViewById(R.id.tv_applied_text);
+
+            mCompanyName.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Job job = mJobs.get(getAdapterPosition());
                     mClickHandler.onJobClick(job);
+                }
+            });
+
+            mDateApplied.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Job job = mJobs.get(getAdapterPosition());
+                    mClickHandler.onJobClick(job);
+                }
+            });
+
+            mAppliedText.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Job job = mJobs.get(getAdapterPosition());
+                    mClickHandler.onJobClick(job);
+                }
+            });
+
+            mJobDescription.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Job job = mJobs.get(getAdapterPosition());
+                    mClickHandler.onJobDescriptionClick(mJobDescription, job);
                 }
             });
         }

@@ -6,8 +6,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.util.List;
@@ -21,10 +21,11 @@ public class JobDetailActivity extends AppCompatActivity {
     private TextView mDateApplied;
     private TextView mJobDescription;
     private EditText mNewInteraction;
-    private Button mAddInteraction;
+    private ImageButton mAddInteraction;
     private RecyclerView mRecyclerView;
     private InteractionsListAdapter mAdapter;
     private long mJobId;
+    private String mJobDescriptionText;
     private DbOperations mOperator;
 
     @Override
@@ -43,12 +44,14 @@ public class JobDetailActivity extends AppCompatActivity {
 
         mCompanyName.setText(extras.getString(MainActivity.JOB_COMPANY_NAME_EXTRA));
         mDateApplied.setText(extras.getString(MainActivity.JOB_DATE_APPLIED_EXTRA));
-        mJobDescription.setText(extras.getString(MainActivity.JOB_DESCRIPTION_EXTRA));
+        mJobDescriptionText = extras.getString(MainActivity.JOB_DESCRIPTION_EXTRA);
+        mJobDescription.setText(getResources().getString(R.string.tv_job_description_holder));
+        mJobDescription.setOnClickListener(new JobDescriptionListener());
         mJobId = extras.getLong(MainActivity.JOB_ID_EXTRA);
 
         mOperator = new DbOperations(this);
 
-        mAdapter = new InteractionsListAdapter();
+        mAdapter = new InteractionsListAdapter(this);
         List<Interaction> interactionList = mOperator.getAllInteractionsForJob(mJobId);
         Log.d("interactions", interactionList.toString());
         mAdapter.setInteractionData(interactionList);
@@ -71,6 +74,25 @@ public class JobDetailActivity extends AppCompatActivity {
                 mAdapter.clearInteractions();
                 mAdapter.setInteractionData(mOperator.getAllInteractionsForJob(mJobId));
                 mNewInteraction.getText().clear();
+            }
+        }
+    }
+
+    private class JobDescriptionListener implements View.OnClickListener {
+        @Override
+        public void onClick(View view) {
+            if (view.getTag().equals("hidden")) {
+                TextView textView = (TextView) view;
+                textView.setText(mJobDescriptionText);
+                mNewInteraction.setVisibility(View.INVISIBLE);
+                mAddInteraction.setVisibility(View.INVISIBLE);
+                textView.setTag("displayed");
+            } else if (view.getTag().equals("displayed")) {
+                TextView textView = (TextView) view;
+                textView.setText(getResources().getString(R.string.tv_job_description_holder));
+                textView.setTag("hidden");
+                mNewInteraction.setVisibility(View.VISIBLE);
+                mAddInteraction.setVisibility(View.VISIBLE);
             }
         }
     }

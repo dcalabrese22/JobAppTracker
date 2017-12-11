@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import dan.dcalabrese22.com.jobapptracker.database.DbOperations;
 import dan.dcalabrese22.com.jobapptracker.interfaces.JobClickHandler;
@@ -105,6 +106,19 @@ public class MainActivity extends AppCompatActivity implements JobClickHandler{
         bundle.putString(JOB_DESCRIPTION_EXTRA, job.getJobDescription());
         intent.putExtras(bundle);
         startActivity(intent);
+    }
+
+    @Override
+    public void onJobDescriptionClick(View view, Job job) {
+        if (view.getTag().equals("hidden")) {
+            TextView textView = (TextView) view;
+            textView.setText(job.getJobDescription());
+            textView.setTag("displayed");
+        } else if (view.getTag().equals("displayed")) {
+            TextView textView = (TextView) view;
+            textView.setText(getResources().getString(R.string.tv_job_description_holder));
+            textView.setTag("hidden");
+        }
     }
 
     private class NewJobBtnClickListener implements View.OnClickListener {
