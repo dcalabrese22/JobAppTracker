@@ -1,0 +1,56 @@
+{
+  "project_info": {
+    "project_number": "269423367062",
+    "project_id": "firebase-job-application-track"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:269423367062:android:35154ed82fbd9c9b",
+        "android_client_info": {
+          "package_name": "dan.dcalabrese22.com.jobapptracker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "269423367062-b0ejvhm0sursqvu39sc3eg9fd9na0rqc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "dan.dcalabrese22.com.jobapptracker",
+            "certificate_hash": "f8f422d61caf01ff228a11f938f2e0a82d2bae53"
+          }
+        },
+        {
+          "client_id": "269423367062-8heb5qivnp46o9iidr2f80n39s7brk8r.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "269423367062-b1n1aaficb3ln1t0khb36vumajqb0sn0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "dan.dcalabrese22.com.jobapptracker",
+            "certificate_hash": "eb290d29393b13097ab019054640a980a6e1a6aa"
+          }
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDsHKHndRBoKooTpFycREXvSgsKtTMSrsE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
