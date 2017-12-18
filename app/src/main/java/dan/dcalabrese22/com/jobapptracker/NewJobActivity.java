@@ -6,9 +6,12 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -42,6 +45,17 @@ public class NewJobActivity extends AppCompatActivity {
 
         mGetFromClipboardBtn.setOnClickListener(new GetFromClipboardButtonListener());
         mAddJobBtn.setOnClickListener(new AddJobButtonListener());
+
+        mJobDescription.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                if (i == EditorInfo.IME_ACTION_SEND) {
+                    addJob();
+                    return true;
+                }
+                return false;
+            }
+        });
     }
 
     private class GetFromClipboardButtonListener implements View.OnClickListener {
@@ -58,17 +72,20 @@ public class NewJobActivity extends AppCompatActivity {
     private class AddJobButtonListener implements View.OnClickListener {
         @Override
         public void onClick(View view) {
-            if (!mCompanyName.getText().toString().equals("") && !mDateApplied.getText().toString().equals("") &&
-                    !mJobDescription.getText().toString().equals("")) {
-                Job job = new Job(mCompanyName.getText().toString(), mDateApplied.getText().toString(),
-                        mJobDescription.getText().toString());
-                long id = mOperations.insertJob(job);
-                job.setJobId(id);
-                mCompanyName.getText().clear();
-                mJobDescription.getText().clear();
-                mDateApplied.setText(getTodaysDate());
-                Log.d("add new job", "pressed");
-            }
+            addJob();
+        }
+    }
+
+    public void addJob() {
+        if (!mCompanyName.getText().toString().equals("") && !mDateApplied.getText().toString().equals("") &&
+                !mJobDescription.getText().toString().equals("")) {
+            Job job = new Job(mCompanyName.getText().toString(), mDateApplied.getText().toString(),
+                    mJobDescription.getText().toString());
+            long id = mOperations.insertJob(job);
+            job.setJobId(id);
+            mCompanyName.getText().clear();
+            mJobDescription.getText().clear();
+            mDateApplied.setText(getTodaysDate());
         }
     }
 
@@ -76,8 +93,6 @@ public class NewJobActivity extends AppCompatActivity {
         SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy");
         return format.format(new Date());
     }
-
-
 
 
 }

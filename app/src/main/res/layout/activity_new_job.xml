@@ -29,10 +29,20 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:hint="@string/job_link"
+        android:layout_margin="5dp"
+        android:layout_below="@+id/et_date_applied"
+        android:id="@+id/et_job_link"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:textSize="@dimen/add_new_job_text_size"
         android:hint="@string/tv_job_description_hint"
         android:layout_margin="@dimen/add_new_job_view_margin"
-        android:layout_below="@id/et_date_applied"
+        android:layout_below="@id/et_job_link"
+        android:imeOptions="actionDone"
         android:id="@+id/et_job_description"/>
 
     <Button

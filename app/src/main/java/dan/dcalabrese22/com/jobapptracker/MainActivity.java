@@ -3,6 +3,7 @@ package dan.dcalabrese22.com.jobapptracker;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -11,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -23,8 +25,22 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.drive.Drive;
+import com.google.android.gms.drive.DriveClient;
+import com.google.android.gms.drive.DriveContents;
+import com.google.android.gms.drive.DriveFile;
+import com.google.android.gms.drive.DriveFolder;
+import com.google.android.gms.drive.DriveId;
+import com.google.android.gms.drive.DriveResourceClient;
+import com.google.android.gms.drive.MetadataChangeSet;
+import com.google.android.gms.drive.OpenFileActivityOptions;
+import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.TaskCompletionSource;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 
 import dan.dcalabrese22.com.jobapptracker.database.DbOperations;
 import dan.dcalabrese22.com.jobapptracker.interfaces.JobClickHandler;
@@ -39,18 +55,24 @@ public class MainActivity extends AppCompatActivity implements JobClickHandler{
     private DbOperations mOperator;
     private SignInButton mSignInButton;
     private GoogleSignInClient mGoogleSignInClient;
+    private DriveResourceClient mDriveResourceClient;
+    private DriveClient mDriveClient;
+    private TaskCompletionSource<DriveId> mOpenItemTaskSource;
 
     public static final String JOB_ID_EXTRA = "job_id_extra";
     public static final String JOB_COMPANY_NAME_EXTRA = "company_name_extra";
     public static final String JOB_DATE_APPLIED_EXTRA = "date_applied_extra";
     public static final String JOB_DESCRIPTION_EXTRA = "description_extra";
     public static final int RC_SIGN_ON = 1;
+    public static final int REQUEST_CODE_OPEN_ITEM = 2;
 
     @Override
     protected void onStart() {
         super.onStart();
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
         updateUi(account);
+        mDriveResourceClient = Drive.getDriveResourceClient(this, account);
+        mDriveClient = Drive.getDriveClient(this, account);
     }
 
     @Override
@@ -75,6 +97,7 @@ public class MainActivity extends AppCompatActivity implements JobClickHandler{
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
+                .requestScopes(Drive.SCOPE_FILE)
                 .build();
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
@@ -118,6 +141,52 @@ public class MainActivity extends AppCompatActivity implements JobClickHandler{
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(touchHelperCallback);
         itemTouchHelper.attachToRecyclerView(mRecyclerview);
 
+    }
+
+    /**
+     * Prompts the user to select a folder using OpenFileActivity.
+     *
+     * @param openOptions Filter that should be applied to the selection
+     * @return Task that resolves with the selected item's ID.
+     */
+    private Task<DriveId> pickItem(OpenFileActivityOptions openOptions) {
+        mOpenItemTaskSource = new TaskCompletionSource<>();
+        mDriveClient
+                .newOpenFileActivityIntentSender(openOptions)
+                .continueWith(new Continuation<IntentSender, Void>() {
+                    @Override
+                    public Void then(@NonNull Task<IntentSender> task) throws Exception {
+                        startIntentSenderForResult(
+                                task.getResult(), REQUEST_CODE_OPEN_ITEM, null, 0, 0, 0);
+                        return null;
+                    }
+                });
+        return mOpenItemTaskSource.getTask();
+    }
+
+
+
+    public void openFile(DriveFile file) {
+        Task<DriveContents> openFileTask = mDriveResourceClient.openFile(file, DriveFile.MODE_READ_ONLY);
+
+        openFileTask.continueWithTask(new Continuation<DriveContents, Task<Void>>() {
+            @Override
+            public Task<Void> then(@NonNull Task<DriveContents> task) throws Exception {
+                DriveContents contents = task.getResult();
+                try (BufferedReader reader = new BufferedReader(
+                        new InputStreamReader(contents.getInputStream()))) {
+                    StringBuilder builder = new StringBuilder();
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        builder.append(line).append("\n");
+                    }
+                    Log.d("Message", builder.toString());
+                }
+
+                Task<Void> discardTask = mDriveResourceClient.discardContents(contents);
+                return discardTask;
+            }
+        });
     }
 
     @Override
@@ -182,10 +251,19 @@ public class MainActivity extends AppCompatActivity implements JobClickHandler{
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == RC_SIGN_ON) {
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            handleSignInResult(task);
+        switch (requestCode) {
+            case RC_SIGN_ON:
+                Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+                handleSignInResult(task);
+                break;
+            case REQUEST_CODE_OPEN_ITEM:
+                if (resultCode == RESULT_OK) {
+                    DriveId driveId = data.getParcelableExtra(OpenFileActivityOptions.EXTRA_RESPONSE_DRIVE_ID);
+                    mOpenItemTaskSource.setResult(driveId);
+                } else {
+                    mOpenItemTaskSource.setException(new RuntimeException("Unable to open file"));
+                }
+                break;
         }
     }
 
@@ -193,6 +271,8 @@ public class MainActivity extends AppCompatActivity implements JobClickHandler{
         try {
             GoogleSignInAccount account = task.getResult(ApiException.class);
             updateUi(account);
+            mDriveResourceClient = Drive.getDriveResourceClient(this, account);
+            mDriveClient = Drive.getDriveClient(this, account);
         } catch (ApiException e) {
             e.printStackTrace();
         }
